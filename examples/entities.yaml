@@ -1,41 +1,505 @@
+# examples/entities.yaml
 ---
-# https://backstage.io/docs/features/software-catalog/descriptor-format#kind-system
+# Define teams/groups
 apiVersion: backstage.io/v1alpha1
-kind: System
+kind: Group
 metadata:
-  name: examples
+  name: team-alpha
+  description: Customer Experience Team
 spec:
-  owner: guests
+  type: team
+  profile:
+    displayName: Team Alpha
+    email: alpha@techcorp.com
+  children: []
 ---
-# https://backstage.io/docs/features/software-catalog/descriptor-format#kind-component
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: team-bravo
+  description: User Management Team
+spec:
+  type: team
+  profile:
+    displayName: Team Bravo
+    email: bravo@techcorp.com
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: team-charlie
+  description: Payment Processing Team
+spec:
+  type: team
+  profile:
+    displayName: Team Charlie
+    email: charlie@techcorp.com
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: team-delta
+  description: Inventory Management Team
+spec:
+  type: team
+  profile:
+    displayName: Team Delta
+    email: delta@techcorp.com
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: team-platform
+  description: Platform Infrastructure Team
+spec:
+  type: team
+  profile:
+    displayName: Platform Team
+    email: platform@techcorp.com
+  children: []
+---
+# Define users
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: alice.dev
+spec:
+  profile:
+    displayName: Alice Developer
+    email: alice@techcorp.com
+  memberOf: [team-alpha]
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: bob.dev
+spec:
+  profile:
+    displayName: Bob Developer
+    email: bob@techcorp.com
+  memberOf: [team-bravo]
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: charlie.dev
+spec:
+  profile:
+    displayName: Charlie Developer
+    email: charlie@techcorp.com
+  memberOf: [team-charlie]
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: diana.dev
+spec:
+  profile:
+    displayName: Diana Developer
+    email: diana@techcorp.com
+  memberOf: [team-delta]
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: platform.dev
+spec:
+  profile:
+    displayName: Platform Developer
+    email: platform@techcorp.com
+  memberOf: [team-platform]
+---
+# Frontend Services
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: example-website
+  name: customer-portal
+  description: Customer facing web portal for TechCorp services
+  title: Customer Portal
+  tags:
+    - react
+    - website
+    - frontend
+  annotations:
+    backstage.io/techdocs-ref: dir:.
+    github.com/project-slug: techcorp/customer-portal
+    backstage.io/managed-by-location: url:https://github.com/techcorp/customer-portal
 spec:
   type: website
-  lifecycle: experimental
-  owner: guests
-  system: examples
-  providesApis: [example-grpc-api]
+  lifecycle: production
+  owner: group:team-alpha
+  system: customer-facing
+  dependsOn:
+    - component:mobile-api-gateway
+    - component:user-service
+    - resource:redis-cache
+  providesApis:
+    - customer-portal-api
 ---
-# https://backstage.io/docs/features/software-catalog/descriptor-format#kind-api
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: admin-dashboard
+  description: Internal admin dashboard for TechCorp employees
+  title: Admin Dashboard
+  tags:
+    - vue
+    - website
+    - internal
+  annotations:
+    backstage.io/techdocs-ref: dir:.
+    github.com/project-slug: techcorp/admin-dashboard
+spec:
+  type: website
+  lifecycle: production
+  owner: group:team-alpha
+  system: internal-tools
+  dependsOn:
+    - component:mobile-api-gateway
+    - component:user-service
+    - component:inventory-service
+---
+# Backend Services
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: mobile-api-gateway
+  description: API Gateway for all mobile and web clients
+  title: Mobile API Gateway
+  tags:
+    - graphql
+    - gateway
+    - nodejs
+  annotations:
+    backstage.io/techdocs-ref: dir:.
+    github.com/project-slug: techcorp/api-gateway
+spec:
+  type: service
+  lifecycle: production
+  owner: group:team-platform
+  system: platform
+  dependsOn:
+    - component:user-service
+    - component:payment-service
+    - component:inventory-service
+    - component:notification-service
+    - resource:redis-cache
+  providesApis:
+    - gateway-api
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: user-service
+  description: User management and authentication service
+  title: User Service
+  tags:
+    - java
+    - spring-boot
+    - authentication
+  annotations:
+    backstage.io/techdocs-ref: dir:.
+    github.com/project-slug: techcorp/user-service
+spec:
+  type: service
+  lifecycle: production
+  owner: group:team-bravo
+  system: user-management
+  dependsOn:
+    - resource:user-database
+    - resource:redis-cache
+  providesApis:
+    - user-api
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: payment-service
+  description: Payment processing and transaction management
+  title: Payment Service
+  tags:
+    - python
+    - django
+    - payments
+  annotations:
+    backstage.io/techdocs-ref: dir:.
+    github.com/project-slug: techcorp/payment-service
+spec:
+  type: service
+  lifecycle: production
+  owner: group:team-charlie
+  system: payment
+  dependsOn:
+    - component:user-service
+    - resource:payment-processor
+    - resource:payment-database
+  providesApis:
+    - payment-api
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: inventory-service
+  description: Product inventory and stock management
+  title: Inventory Service
+  tags:
+    - go
+    - microservice
+    - inventory
+  annotations:
+    backstage.io/techdocs-ref: dir:.
+    github.com/project-slug: techcorp/inventory-service
+spec:
+  type: service
+  lifecycle: production
+  owner: group:team-delta
+  system: inventory
+  dependsOn:
+    - resource:inventory-database
+    - resource:redis-cache
+  providesApis:
+    - inventory-api
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: notification-service
+  description: Email and push notification service
+  title: Notification Service
+  tags:
+    - nodejs
+    - messaging
+    - email
+  annotations:
+    backstage.io/techdocs-ref: dir:.
+    github.com/project-slug: techcorp/notification-service
+spec:
+  type: service
+  lifecycle: production
+  owner: group:team-platform
+  system: platform
+  dependsOn:
+    - resource:email-gateway
+    - resource:redis-cache
+  providesApis:
+    - notification-api
+---
+# Define APIs
 apiVersion: backstage.io/v1alpha1
 kind: API
 metadata:
-  name: example-grpc-api
+  name: user-api
+  description: User management REST API
+  title: User Service API
+  tags:
+    - rest
+    - openapi
 spec:
-  type: grpc
-  lifecycle: experimental
-  owner: guests
-  system: examples
-  definition: |
-    syntax = "proto3";
-
-    service Exampler {
-      rpc Example (ExampleMessage) returns (ExampleMessage) {};
-    }
-
-    message ExampleMessage {
-      string example = 1;
-    };
+  type: openapi
+  lifecycle: production
+  owner: group:team-bravo
+  system: user-management
+  definition:
+    $text: https://api.techcorp.com/user-service/openapi.json
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: payment-api
+  description: Payment processing REST API
+  title: Payment Service API
+  tags:
+    - rest
+    - openapi
+spec:
+  type: openapi
+  lifecycle: production
+  owner: group:team-charlie
+  system: payment
+  definition:
+    $text: https://api.techcorp.com/payment-service/openapi.json
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: inventory-api
+  description: Inventory management REST API
+  title: Inventory Service API
+  tags:
+    - rest
+    - openapi
+spec:
+  type: openapi
+  lifecycle: production
+  owner: group:team-delta
+  system: inventory
+  definition:
+    $text: https://api.techcorp.com/inventory-service/openapi.json
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: notification-api
+  description: Notification service REST API
+  title: Notification Service API
+  tags:
+    - rest
+    - openapi
+spec:
+  type: openapi
+  lifecycle: production
+  owner: group:team-platform
+  system: platform
+  definition:
+    $text: https://api.techcorp.com/notification-service/openapi.json
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: gateway-api
+  description: GraphQL API Gateway endpoint
+  title: API Gateway GraphQL
+  tags:
+    - graphql
+    - federation
+spec:
+  type: graphql
+  lifecycle: production
+  owner: group:team-platform
+  system: platform
+  definition:
+    $text: https://api.techcorp.com/gateway/graphql
+---
+# Define resources (databases, external services, etc.)
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: user-database
+  description: PostgreSQL database for user profiles and authentication data
+  title: User Database
+  tags:
+    - postgresql
+    - aws-rds
+spec:
+  type: database
+  owner: group:team-bravo
+  system: user-management
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: payment-database
+  description: PostgreSQL database for payment transactions
+  title: Payment Database
+  tags:
+    - postgresql
+    - aws-rds
+spec:
+  type: database
+  owner: group:team-charlie
+  system: payment
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: inventory-database
+  description: MongoDB database for product inventory
+  title: Inventory Database
+  tags:
+    - mongodb
+    - atlas
+spec:
+  type: database
+  owner: group:team-delta
+  system: inventory
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: redis-cache
+  description: Redis cluster for caching and session management
+  title: Redis Cache Cluster
+  tags:
+    - redis
+    - elasticache
+spec:
+  type: cache
+  owner: group:team-platform
+  system: platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: payment-processor
+  description: External payment gateway integration (Stripe)
+  title: Stripe Payment Gateway
+  tags:
+    - stripe
+    - third-party
+spec:
+  type: third-party-service
+  owner: group:team-charlie
+  system: payment
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: email-gateway
+  description: AWS SES for email delivery
+  title: Email Gateway
+  tags:
+    - aws-ses
+    - email
+spec:
+  type: third-party-service
+  owner: group:team-platform
+  system: platform
+---
+# Define systems (logical grouping of components)
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: customer-facing
+  description: Customer facing applications and services
+  title: Customer Experience
+spec:
+  owner: group:team-alpha
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: user-management
+  description: User identity and management system
+  title: User Management
+spec:
+  owner: group:team-bravo
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: payment
+  description: Payment processing system
+  title: Payment System
+spec:
+  owner: group:team-charlie
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: inventory
+  description: Inventory management system
+  title: Inventory System
+spec:
+  owner: group:team-delta
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: platform
+  description: Shared platform infrastructure
+  title: Platform Infrastructure
+spec:
+  owner: group:team-platform
