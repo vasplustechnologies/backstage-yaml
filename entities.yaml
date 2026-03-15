@@ -124,7 +124,7 @@ metadata:
     - website
     - frontend
   annotations:
-    backstage.io/techdocs-ref: url:https://github.com/vasplustechnologies/backstage-yaml
+    backstage.io/techdocs-ref: dir:.
     github.com/project-slug: vasplustechnologies/backstage-yaml
 spec:
   type: website
@@ -149,7 +149,7 @@ metadata:
     - website
     - internal
   annotations:
-    backstage.io/techdocs-ref: url:https://github.com/vasplustechnologies/backstage-yaml
+    backstage.io/techdocs-ref: dir:.
     github.com/project-slug: vasplustechnologies/backstage-yaml
 spec:
   type: website
@@ -173,7 +173,7 @@ metadata:
     - gateway
     - nodejs
   annotations:
-    backstage.io/techdocs-ref: url:https://github.com/vasplustechnologies/backstage-yaml
+    backstage.io/techdocs-ref: dir:.
     github.com/project-slug: vasplustechnologies/backstage-yaml
 spec:
   type: service
@@ -200,7 +200,7 @@ metadata:
     - spring-boot
     - authentication
   annotations:
-    backstage.io/techdocs-ref: url:https://github.com/vasplustechnologies/backstage-yaml
+    backstage.io/techdocs-ref: dir:.
     github.com/project-slug: vasplustechnologies/backstage-yaml
 spec:
   type: service
@@ -224,7 +224,7 @@ metadata:
     - django
     - payments
   annotations:
-    backstage.io/techdocs-ref: url:https://github.com/vasplustechnologies/backstage-yaml
+    backstage.io/techdocs-ref: dir:.
     github.com/project-slug: vasplustechnologies/backstage-yaml
 spec:
   type: service
@@ -273,7 +273,7 @@ metadata:
     - messaging
     - email
   annotations:
-    backstage.io/techdocs-ref: url:https://github.com/vasplustechnologies/backstage-yaml
+    backstage.io/techdocs-ref: dir:.
     github.com/project-slug: vasplustechnologies/backstage-yaml
 spec:
   type: service
