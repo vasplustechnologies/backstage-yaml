@@ -83,11 +83,16 @@ auth:
 scaffolder:
   # see https://backstage.io/docs/features/software-templates/configuration for software template options
 
+
 catalog:
   rules:
     - allow: [Component, API, Resource, Group, User, System, Domain, Location]
-    
-  
+  locations:
+    - type: url
+      target: https://raw.githubusercontent.com/vasplustechnologies/backstage-yaml/main/entities.yaml
+
+
+
   locations:
     # Load your entities
     - type: url
