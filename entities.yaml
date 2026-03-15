@@ -125,8 +125,7 @@ metadata:
     - frontend
   annotations:
     backstage.io/techdocs-ref: dir:.
-    #github.com/project-slug: techcorp/customer-portal
-    github.com/project-slug: vasplustechnologies/backstage-yaml
+    github.com/project-slug: techcorp/customer-portal
     backstage.io/managed-by-location: url:https://github.com/techcorp/customer-portal
 spec:
   type: website
@@ -152,8 +151,7 @@ metadata:
     - internal
   annotations:
     backstage.io/techdocs-ref: dir:.
-    #github.com/project-slug: techcorp/admin-dashboard
-    github.com/project-slug: vasplustechnologies/backstage-yaml
+    github.com/project-slug: techcorp/admin-dashboard
 spec:
   type: website
   lifecycle: production
@@ -177,8 +175,7 @@ metadata:
     - nodejs
   annotations:
     backstage.io/techdocs-ref: dir:.
-    #github.com/project-slug: techcorp/api-gateway
-    github.com/project-slug: vasplustechnologies/backstage-yaml
+    github.com/project-slug: techcorp/api-gateway
 spec:
   type: service
   lifecycle: production
@@ -205,8 +202,7 @@ metadata:
     - authentication
   annotations:
     backstage.io/techdocs-ref: dir:.
-    #github.com/project-slug: techcorp/user-service
-    github.com/project-slug: vasplustechnologies/backstage-yaml
+    github.com/project-slug: techcorp/user-service
 spec:
   type: service
   lifecycle: production
@@ -230,8 +226,7 @@ metadata:
     - payments
   annotations:
     backstage.io/techdocs-ref: dir:.
-    #github.com/project-slug: techcorp/payment-service
-    github.com/project-slug: vasplustechnologies/backstage-yaml
+    github.com/project-slug: techcorp/payment-service
 spec:
   type: service
   lifecycle: production
@@ -256,8 +251,7 @@ metadata:
     - inventory
   annotations:
     backstage.io/techdocs-ref: dir:.
-    #github.com/project-slug: techcorp/inventory-service
-    github.com/project-slug: vasplustechnologies/backstage-yaml
+    github.com/project-slug: techcorp/inventory-service
 spec:
   type: service
   lifecycle: production
@@ -281,8 +275,7 @@ metadata:
     - email
   annotations:
     backstage.io/techdocs-ref: dir:.
-    #github.com/project-slug: techcorp/notification-service
-    github.com/project-slug: vasplustechnologies/backstage-yaml
+    github.com/project-slug: techcorp/notification-service
 spec:
   type: service
   lifecycle: production
@@ -309,8 +302,31 @@ spec:
   lifecycle: production
   owner: group:team-bravo
   system: user-management
-  definition:
-    $text: https://api.techcorp.com/user-service/openapi.json
+  definition: |
+    openapi: 3.0.1
+    info:
+      title: User API
+      version: 1.0.0
+    paths:
+      /users:
+        get:
+          summary: Get all users
+          responses:
+            '200':
+              description: List of users
+              content:
+                application/json:
+                  schema:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          type: string
+                        email:
+                          type: string
 ---
 apiVersion: backstage.io/v1alpha1
 kind: API
@@ -326,8 +342,52 @@ spec:
   lifecycle: production
   owner: group:team-charlie
   system: payment
-  definition:
-    $text: https://api.techcorp.com/payment-service/openapi.json
+  definition: |
+    openapi: 3.0.1
+    info:
+      title: Payment API
+      version: 1.0.0
+    paths:
+      /payments:
+        post:
+          summary: Process a payment
+          responses:
+            '200':
+              description: Payment processed successfully
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      status:
+                        type: string
+                      amount:
+                        type: number
+      /payments/{id}:
+        get:
+          summary: Get payment details
+          parameters:
+            - name: id
+              in: path
+              required: true
+              schema:
+                type: string
+          responses:
+            '200':
+              description: Payment details
+              content:
+                application/json:
+                  schema:
+                    type: object
+                  properties:
+                    id:
+                      type: string
+                    status:
+                      type: string
+                    amount:
+                      type: number
 ---
 apiVersion: backstage.io/v1alpha1
 kind: API
@@ -343,8 +403,36 @@ spec:
   lifecycle: production
   owner: group:team-delta
   system: inventory
-  definition:
-    $text: https://api.techcorp.com/inventory-service/openapi.json
+  definition: |
+    openapi: 3.0.1
+    info:
+      title: Inventory API
+      version: 1.0.0
+    paths:
+      /inventory:
+        get:
+          summary: Get all inventory items
+          responses:
+            '200':
+              description: List of inventory items
+              content:
+                application/json:
+                  schema:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          type: string
+                        quantity:
+                          type: integer
+        post:
+          summary: Add inventory item
+          responses:
+            '201':
+              description: Item created
 ---
 apiVersion: backstage.io/v1alpha1
 kind: API
@@ -360,8 +448,32 @@ spec:
   lifecycle: production
   owner: group:team-platform
   system: platform
-  definition:
-    $text: https://api.techcorp.com/notification-service/openapi.json
+  definition: |
+    openapi: 3.0.1
+    info:
+      title: Notification API
+      version: 1.0.0
+    paths:
+      /notifications:
+        post:
+          summary: Send a notification
+          requestBody:
+            required: true
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    type:
+                      type: string
+                      enum: [email, push, sms]
+                    recipient:
+                      type: string
+                    message:
+                      type: string
+          responses:
+            '200':
+              description: Notification sent
 ---
 apiVersion: backstage.io/v1alpha1
 kind: API
@@ -377,8 +489,46 @@ spec:
   lifecycle: production
   owner: group:team-platform
   system: platform
-  definition:
-    $text: https://api.techcorp.com/gateway/graphql
+  definition: |
+    type Query {
+      users: [User]
+      payments: [Payment]
+      inventory: [InventoryItem]
+      notifications: [Notification]
+    }
+    
+    type Mutation {
+      createUser(name: String!, email: String!): User
+      processPayment(amount: Float!): Payment
+      sendNotification(type: String!, recipient: String!, message: String!): Notification
+    }
+    
+    type User {
+      id: ID!
+      name: String!
+      email: String!
+    }
+    
+    type Payment {
+      id: ID!
+      amount: Float!
+      status: String!
+      createdAt: String!
+    }
+    
+    type InventoryItem {
+      id: ID!
+      name: String!
+      quantity: Int!
+    }
+    
+    type Notification {
+      id: ID!
+      type: String!
+      recipient: String!
+      message: String!
+      status: String!
+    }
 ---
 # Define resources (databases, external services, etc.)
 apiVersion: backstage.io/v1alpha1

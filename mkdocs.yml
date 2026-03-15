@@ -1,0 +1,16 @@
+site_name: 'TechCorp Services'
+site_description: 'Documentation for TechCorp microservices'
+repo_url: 'https://github.com/vasplustechnologies/backstage-yaml'
+
+nav:
+  - Home: index.md
+  - Services:
+    - Customer Portal: customer-portal/index.md
+    - Admin Dashboard: admin-dashboard/index.md
+    - User Service: user-service/index.md
+    - Payment Service: payment-service/index.md
+    - Inventory Service: inventory-service/index.md
+    - Mobile API Gateway: mobile-api-gateway/index.md
+
+plugins:
+  - techdocs-core
