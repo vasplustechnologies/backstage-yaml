@@ -124,9 +124,8 @@ metadata:
     - website
     - frontend
   annotations:
-    backstage.io/techdocs-ref: dir:.
-    github.com/project-slug: techcorp/customer-portal
-    backstage.io/managed-by-location: url:https://github.com/techcorp/customer-portal
+    backstage.io/techdocs-ref: https://github.com/vasplustechnologies/backstage-yaml/tree/main
+    github.com/project-slug: vasplustechnologies/backstage-yaml
 spec:
   type: website
   lifecycle: production
@@ -150,8 +149,8 @@ metadata:
     - website
     - internal
   annotations:
-    backstage.io/techdocs-ref: dir:.
-    github.com/project-slug: techcorp/admin-dashboard
+    backstage.io/techdocs-ref: https://github.com/vasplustechnologies/backstage-yaml/tree/main
+    github.com/project-slug: vasplustechnologies/backstage-yaml
 spec:
   type: website
   lifecycle: production
@@ -174,8 +173,8 @@ metadata:
     - gateway
     - nodejs
   annotations:
-    backstage.io/techdocs-ref: dir:.
-    github.com/project-slug: techcorp/api-gateway
+    backstage.io/techdocs-ref: https://github.com/vasplustechnologies/backstage-yaml/tree/main
+    github.com/project-slug: vasplustechnologies/backstage-yaml
 spec:
   type: service
   lifecycle: production
@@ -201,8 +200,8 @@ metadata:
     - spring-boot
     - authentication
   annotations:
-    backstage.io/techdocs-ref: dir:.
-    github.com/project-slug: techcorp/user-service
+    backstage.io/techdocs-ref: https://github.com/vasplustechnologies/backstage-yaml/tree/main
+    github.com/project-slug: vasplustechnologies/backstage-yaml
 spec:
   type: service
   lifecycle: production
@@ -225,8 +224,8 @@ metadata:
     - django
     - payments
   annotations:
-    backstage.io/techdocs-ref: dir:.
-    github.com/project-slug: techcorp/payment-service
+    backstage.io/techdocs-ref: https://github.com/vasplustechnologies/backstage-yaml/tree/main
+    github.com/project-slug: vasplustechnologies/backstage-yaml
 spec:
   type: service
   lifecycle: production
@@ -274,8 +273,8 @@ metadata:
     - messaging
     - email
   annotations:
-    backstage.io/techdocs-ref: dir:.
-    github.com/project-slug: techcorp/notification-service
+    backstage.io/techdocs-ref: https://github.com/vasplustechnologies/backstage-yaml/tree/main
+    github.com/project-slug: vasplustechnologies/backstage-yaml
 spec:
   type: service
   lifecycle: production
