@@ -87,10 +87,6 @@ scaffolder:
 catalog:
   rules:
     - allow: [Component, API, Resource, Group, User, System, Domain, Location]
-  locations:
-    - type: url
-      target: https://raw.githubusercontent.com/vasplustechnologies/backstage-yaml/main/entities.yaml
-
 
 
   locations:
